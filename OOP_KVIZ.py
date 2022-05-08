@@ -66,7 +66,8 @@ class Lecturer(Mentor):
         return res
 
     def __str__(self):
-        res = f'Лектор\nИмя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за лекции: {self.average_grades()}\n'
+        res = f'Лектор\nИмя: {self.name}\nФамилия: {self.surname}\n' \
+              f'Средняя оценка за лекции: {self.average_grades()}\n'
         return res
 
     def __lt__(self, other):
@@ -93,11 +94,31 @@ class Reviewer(Mentor):
         res = f'Проверяющий\nИмя: {self.name}\nФамилия: {self.surname}\n'
         return res
 
+def average_grade_lecturer(lecturer, course):
+    sum = 0
+    i = 0
+    for lectur in lecturer:
+        for cours_grad in lectur.grades:
+            if cours_grad == course:
+                for grad in lectur.grades.get(course):
+                    sum += grad
+                    i += 1
+    return print(f'Средняя оценка лекторов по курсу {course}: {sum/i}')
+
+def average_grade_course(students, course):
+    sum = 0
+    i = 0
+    for student in students:
+        for grad in student.grades.get(course):
+            sum += grad
+            i += 1
+    return print(f'Средняя оценка студентов по курсу {course}: {sum/i}')
+
 #Студенты
 best_student1 = Student('Ruoy', 'Eman', 'your_gender')
 best_student1.courses_in_progress += ['Python']
 best_student1.courses_in_progress += ['Git']
-best_student1.finished_courses += ['Introduction to programming']
+best_student1. add_courses('Introduction to programming')
 
 best_student2 = Student('Deny', 'DeVito', 'your_gender')
 best_student2.courses_in_progress += ['Python']
@@ -135,5 +156,11 @@ print(cool_mentor4)
 print(best_student1)
 print(best_student2)
 
-comparison = cool_mentor4 < best_student1
+comparison = cool_mentor3 < cool_mentor4
 print(comparison)
+
+list_students = [best_student1, best_student2]
+list_lecturer = [cool_mentor3, cool_mentor4]
+
+average_grade_course(list_students, 'Git')
+average_grade_lecturer(list_lecturer, 'Python')
