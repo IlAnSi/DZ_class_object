@@ -30,13 +30,18 @@ class Student:
         return res
 
     def __str__(self):
-        res = f'Имя: {self.name}\n' \
+        res = f'Студент\nИмя: {self.name}\n' \
               f'Фамилия: {self.surname}\n' \
               f'Средняя оценка за домашние задания: {self.average_grades()}\n' \
               f'Курсы в процессе изучения: {", ".join(self.courses_in_progress)}\n' \
               f'Завершенные курсы: {", ".join(self.finished_courses)}\n'
         return res
 
+    def __lt__(self, other):
+        if not isinstance(other, Student):
+            print('Not a Student!')
+            return
+        return self.average_grades() < other.average_grades()
 
 class Mentor:
     def __init__(self, name, surname):
@@ -46,8 +51,7 @@ class Mentor:
 
 class Lecturer(Mentor):
     def __init__(self, name, surname):
-        self.name = name
-        self.surname = surname
+        super().__init__(name, surname)
         self.grades = {}
         self.courses_attached = []
 
@@ -65,10 +69,15 @@ class Lecturer(Mentor):
         res = f'Лектор\nИмя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за лекции: {self.average_grades()}\n'
         return res
 
+    def __lt__(self, other):
+        if not isinstance(other, Lecturer):
+            print('Not a Lecturer!')
+            return
+        return self.average_grades() < other.average_grades()
+
 class Reviewer(Mentor):
     def __init__(self, name, surname):
-        self.name = name
-        self.surname = surname
+        super().__init__(name, surname)
         self.courses_attached = []
 
     def rate_hw(self, student, course, grade):
@@ -112,7 +121,7 @@ cool_mentor4 = Lecturer('Triniti', 'Matrix')
 cool_mentor3.courses_attached += ['Python']
 cool_mentor4.courses_attached += ['Git']
 
-best_student1.rate_hw(cool_mentor3, 'Python', 10)
+best_student1.rate_hw(cool_mentor3, 'Python', 7)
 best_student1.rate_hw(cool_mentor4, 'Git', 10)
 best_student2.rate_hw(cool_mentor3, 'Python', 9)
 best_student2.rate_hw(cool_mentor4, 'Git', 8)
@@ -125,3 +134,6 @@ print(cool_mentor4)
 
 print(best_student1)
 print(best_student2)
+
+comparison = cool_mentor4 < best_student1
+print(comparison)
